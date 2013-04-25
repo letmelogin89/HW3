@@ -23,7 +23,7 @@ primes(10000)
 
 
 %cython
-cdef primes_c(int n):
+cpdef primes_c(int n):
     #At start, all values are mapped to 1
     cdef dict d = {x: 1 for x in range(2, n+1)}
     for p in range(2,n + 1):
