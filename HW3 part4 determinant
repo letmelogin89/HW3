@@ -1,0 +1,83 @@
+#HW3 part4
+# Compute the determinant of a 4x4 matrix of double precision floating point numbers. (Don't worry about numerical stability. You may make up random inputs.)
+
+def det(M):
+    val = get_det(M)
+    return round(val, 2)
+
+def get_det(M):
+    n=len(M)
+    if (n>2):
+        i=1
+        t=0
+        sum=0
+        while t<=n-1:
+            d={}
+            t1=1
+            while t1<=n-1:
+                m=0
+                d[t1]=[]
+                while m<=n-1:
+                    if (m==t):
+                        u=0
+                    else:
+                        d[t1].append(M[t1][m])
+                    m+=1
+                t1+=1
+            M1=[d[x] for x in d]
+            sum=sum+i*(M[0][t])*(get_det(M1))
+            i=i*(-1)
+            t+=1
+        return sum
+    else:
+        return (M[0][0]*M[1][1]-M[0][1]*M[1][0])
+
+M = [[3.231,0,2.123,-1.0000],[1.233,2.09231,0.000,-2.9821], [4.00,0.0000,6.000123,-3.2398],[5.091,0.1,2.00,0]]
+
+get_det(M)
+det(M)
+
+%timeit det(M)
+#result: 625 loops, best of 3: 946 µs per loop
+
+
+%cython
+cdef det_c(list M):
+    cdef float val = get_det_c(M)
+    return round(val, 2)
+
+cdef get_det_c(list M):
+    cdef int n=len(M)
+    if (n>2):
+        i=1
+        t=0
+        sum=0
+        while t<=n-1:
+            d={}
+            t1=1
+            while t1<=n-1:
+                m=0
+                d[t1]=[]
+                while m<=n-1:
+                    if (m==t):
+                        u=0
+                    else:
+                        d[t1].append(M[t1][m])
+                    m+=1
+                t1+=1
+            M1=[d[x] for x in d]
+            sum=sum+i*(M[0][t])*(get_det_c(M1))
+            i=i*(-1)
+            t+=1
+        return sum
+    else:
+        return (M[0][0]*M[1][1]-M[0][1]*M[1][0])
+
+M = [[3.231,0,2.123,-1.0000],[1.233,2.09231,0.000,-2.9821], [4.00,0.0000,6.000123,-3.2398],[5.091,0.1,2.00,0]]
+
+print get_det_c(M)
+print det_c(M)
+
+%timeit det_c(M)
+#result: 625 loops, best of 3: 36 µs per loop
+
