@@ -1,0 +1,45 @@
+#HW3 part3
+# Compute a list of all prime numbers up to 10000.
+
+def primes(n):
+    #At start, all values are mapped to 1
+    dicti = {x: 1 for x in range(2, n+1)}
+    for p in range(2,n + 1):
+    #Checking all multiples of p
+        for i in range(p,(n/p) + 1):
+    #This removes the multiples by setting their value to 0 (composite)
+           dicti[i*p] = 0
+        p+=1
+
+    primes = []
+    for key in dicti.keys():
+        if dicti[key] == 1:
+            primes.append(key)
+
+    print primes
+
+%timeit primes(10000)
+#result was: 5 loops, best of 3: 137 ms per loop
+
+
+%cython
+cdef primes_c(int n):
+    #At start, all values are mapped to 1
+    cdef dict dicti = {x: 1 for x in range(2, n+1)}
+    for p in range(2,n + 1):
+    #Checking all multiples of p
+        for i in range(p,(n/p) + 1):
+    #This removes the multiples by setting their value to 0 (composite)
+           dicti[i*p] = 0
+        p+=1
+
+    primes = []
+    for key in dicti.keys():
+        if dicti[key] == 1:
+            primes.append(key)
+
+    print primes
+
+%timeit primes_c(10000)
+#result was: 25 loops, best of 3: 7.96 ms per loop
+
