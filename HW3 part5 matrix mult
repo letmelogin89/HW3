@@ -1,0 +1,41 @@
+# HW3 part5
+# Multiply a 4x4 matrix of double precision floating point numbers times another 4x4 matrix.
+#(You may make up random inputs. Do not worry about numerical stability.)
+
+def mat_mul(A,B):
+    #4x4 square matrix so m = n
+    n = len(A)
+    C = [[0 for y in range(n)] for x in range(n)]
+    total = 0
+    for y in range(n):
+        for x in range(n):
+            for i in range(n):
+                total+=A[x][i]*B[i][y]
+                C[x][y]=total
+            total = 0
+    return C
+A = [[1,2,3,4],[4,5,6,7],[5,6,7,8],[1,2,3,4]]
+B = [[1,-2,3,4],[-4,-5,6,7],[5,6,-7,8],[1,2,3,4]]
+
+%timeit mat_mul(A,B)
+#result: 625 loops, best of 3: 40.2 µs per loop
+
+%cython
+cpdef mat_mul_c(list A,list B):
+    #4x4 square matrix so m = n
+    cdef int n = len(A)
+    cdef list  C = [[0 for y in range(n)] for x in range(n)]
+    total = 0
+    for y in range(n):
+        for x in range(n):
+            for i in range(n):
+                total+=A[x][i]*B[i][y]
+                C[x][y]=total
+            total = 0
+    return C
+A = [[1,2,3,4],[4,5,6,7],[5,6,7,8],[1,2,3,4]]
+B = [[1,-2,3,4],[-4,-5,6,7],[5,6,-7,8],[1,2,3,4]]
+
+%timeit mat_mul_c(A,B)
+#result: 625 loops, best of 3: 4.55 µs per loop
+
