@@ -42,7 +42,7 @@ det(M)
 
 
 %cython
-cdef det_c(list M):
+cpdef det_c(list M):
     cdef float val = get_det_c(M)
     return round(val, 2)
 
